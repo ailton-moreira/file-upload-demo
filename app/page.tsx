@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Uploader } from "@/lib/Uploader";
 
 export default function Home() {
-  const [inputValue, setInputValue] = useState("");
   const [upload, setUpload] = useState<Uploader | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [fileLocation, setFileLocation] = useState(null);
+  const [fileLocation, setFileLocation] = useState<string | null>(null);
 
-  const onFileChanged = (e) => {
-    const file = [...e.target.files][0];
-    setInputValue(file)
+  const onFileChanged = (e: React.FormEvent<HTMLInputElement>) => {
+    const files = (e.target as HTMLInputElement).files;
+    if (!files) return;
+    const file = files[0];
     const uploader = new Uploader({ file })
       .onProgress(({ percentage }) => {
         setUploadProgress(percentage);
@@ -28,7 +28,8 @@ export default function Home() {
     setUpload(uploader);
     uploader.start();
   };
-  
+
+
   return (
     <div className="mx-auto max-w-7xl sm:p-6 lg:p-8">
       <div className="flex text-sm text-gray-600">
@@ -43,7 +44,6 @@ export default function Home() {
             type="file"
             className="sr-only"
             onChange={onFileChanged}
-            value={inputValue}
             size={1000}
             accept=".csv, .xlsx, .xls, .sav"
           />

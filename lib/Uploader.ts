@@ -78,6 +78,7 @@ export class Uploader {
       this.parts.push(
         ...[...Array(numberOfParts).keys()].map((_, index) => ({
           PartNumber: index + 1,
+          ETag: "",
         }))
       );
 
